@@ -1,6 +1,6 @@
 import unicornhat as unicorn
-from UsefulFuncts import *
-from chessClass import *
+from functs import *
+from classes import *
 
 # pieces of player 1 (tab[Objects])
 P1 = [King(player = "p1", case = "A4"),
