@@ -1,5 +1,5 @@
 import unicornhat as unicorn
-from UsefulFuncts import *
+from functs import *
 
 
 class AbstractPiece :
