@@ -52,7 +52,6 @@ arguments:
  	-diagonal : capacity to move diagonally (bool)
  	-horizVert : capacity to move horizontally and vertically (bool)
  	-length : hypotetic number of accessible cases each side (int)
-
 !!! other method call : limitFilter()
  
 Return authorized positions"""
