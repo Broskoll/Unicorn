@@ -28,7 +28,7 @@ class King(AbstractPiece):
 		self.possiblePositions = possiblePositions(self.position, True, True, 1)
 
 	
-	#def movementRule(self, unauthorizedPosition):
+	#def movementRule(self, unauthorizedPosition) :
 
 	def move(self, case):
 		self.case = case
