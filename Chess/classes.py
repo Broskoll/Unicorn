@@ -1,5 +1,5 @@
 import unicornhat as unicorn
-from functs import *
+from functions import *
 
 
 class AbstractPiece :
@@ -10,6 +10,7 @@ class AbstractPiece :
 		self.player = player
 		self.case = case
 		self.position = caseToPosition(self.case)
+		self.possiblePositions = []
 
 	def invertIntensity(self):
 		for i in range(3):
@@ -25,11 +26,10 @@ class King(AbstractPiece):
 		AbstractPiece.__init__(self, player, case)
 		self.type = "king"
 		self.color = [128, 0, 0]
-		self.possiblePositions = possiblePositions(self.position, True, True, 1)
-
-	
-	#def movementRule(self, unauthorizedPosition) :
-
+		self.diagonal = True
+		self.horizVert = True
+		self.length = 1
+		
 	def move(self, case):
 		self.case = case
 		self.position = caseToPosition(self.case)		
@@ -41,7 +41,9 @@ class Queen(AbstractPiece):
 		AbstractPiece.__init__(self, player, case)
 		self.type = "queen"
 		self.color = [0, 128, 0]
-		self.possiblePositions = possiblePositions(self.position, True, True, 8)
+		self.diagonal = True
+		self.horizVert = True
+		self.length = 7
 
 	def move():
 		print("move")
@@ -52,8 +54,9 @@ class Bishop(AbstractPiece):
 		AbstractPiece.__init__(self, player, case)
 		self.type = "bishop"
 		self.color = [0, 0, 128]
-		self.possiblePositions = possiblePositions(self.position, True, False, 8)
-		print (self.possiblePositions)
+		self.diagonal = True
+		self.horizVert = False
+		self.length = 7
 		
 	def move():
 		print("move")
@@ -64,6 +67,9 @@ class Knight(AbstractPiece):
 		AbstractPiece.__init__(self, player, case)
 		self.type = "knight"
 		self.color = [128, 0, 128]
+		self.diagonal = False
+		self.horizVert = False
+		self.length = 0
 		self.possiblePositions = [
 		[self.position[0]-2,self.position[1]-1],
 		[self.position[0]-2,self.position[1]+1],
@@ -84,7 +90,9 @@ class Rook(AbstractPiece):
 		AbstractPiece.__init__(self, player, case)
 		self.type = "rook"
 		self.color = [128, 128, 0]
-		self.possiblePositions = possiblePositions(self.position, False, True, 8)
+		self.diagonal = False
+		self.horizVert = True
+		self.length = 7
 
 	def move():
 		print("move")
@@ -95,6 +103,9 @@ class Pawn(AbstractPiece):
 		AbstractPiece.__init__(self, player, case)
 		self.type = "pawn"
 		self.color = [128, 128, 128]
+		self.diagonal = False
+		self.horizVert = False
+		self.length = 0
 		if self.player == "p1":
 			self.possiblePositions = [
 			[self.position[0]+1,self.position[1]],
