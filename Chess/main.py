@@ -1,5 +1,5 @@
 import unicornhat as unicorn
-from functs import *
+from functions import *
 from classes import *
 
 # pieces of player 1 (tab[Objects])
@@ -47,21 +47,165 @@ def getCase(case):
 	coord = caseToPosition(case)
 	return chessGrid[coord[0]][coord[1]]
 
+def getPos(coord):
+	if coord[0] < 0 or coord[0] > 7 or coord[1] < 0 or coord[1] > 7:
+		return None 
+	else:
+		return chessGrid[coord[0]][coord[1]]
+
 """to invert intensities of several pieces
 !!! call abstractPiece method invertIntensity()"""
 def invertIntensities(pieces):
 	for piece in pieces:
 		piece.invertIntensity()
 
-def freeCaseFilter(posToFiltrate):
-	i = 0
-	while i < len(posToFiltrate):
-		if chessGrid[posToFiltrate[i][0]][posToFiltrate[i][1]] == None:
-			i += 1
-		else:
-			posToFiltrate.remove(posToFiltrate[i])
-	return posToFiltrate
+def possibleCases(position, player, pType, diagonal, horizVert, length):
+	validPos = []
+	
+	if horizVert:
+		i = 1
+		positive = True
+		negative = True
 
+		while (positive or negative) and i <= length:
+			if position[1]+i > 7:
+				positive = False
+			elif getPos([position[0],position[1]+i]) != None:
+				if getPos([position[0],position[1]+i]).player != player and positive:
+					validPos.append([position[0],position[1]+i])		
+				positive = False
+			elif positive:
+				validPos.append([position[0],position[1]+i])
+			
+			if position[1]-i < 0:
+				negative = False
+			elif getPos([position[0],position[1]-i]) != None:
+				if getPos([position[0],position[1]-i]).player != player and negative:
+					validPos.append([position[0],position[1]-i])		
+				negative = False
+			elif negative:
+				validPos.append([position[0],position[1]-i])
+			i += 1
+
+		i = 1
+		positive = True
+		negative = True
+
+		while (positive or negative) and i <= length:
+			if position[0]+i > 7:
+				positive = False
+			elif getPos([position[0]+i,position[1]]) != None:
+				if getPos([position[0]+i,position[1]]).player != player and positive:
+					validPos.append([position[0]+i,position[1]])		
+				positive = False
+			elif positive:
+				validPos.append([position[0]+i,position[1]])
+			
+			if position[0]-i < 0:
+				negative = False
+			elif getPos([position[0]-i,position[1]]) != None:
+				if getPos([position[0]-i,position[1]]).player != player and negative:
+					validPos.append([position[0]-i,position[1]])		
+				negative = False
+			elif negative:
+				validPos.append([position[0]-i,position[1]])
+			i += 1
+
+	if diagonal:
+		i = 1
+		positive = True
+		negative = True
+		while (positive or negative) and i <= length:
+
+			if position[0]+i > 7 or position[1]+i > 7:
+				positive = False
+			elif getPos([position[0]+i,position[1]+i]) != None:
+				if getPos([position[0]+i,position[1]+i]).player != player and positive:
+					validPos.append([position[0]+i,position[1]+i])		
+				positive = False
+			elif positive:
+				validPos.append([position[0]+i,position[1]+i])
+			
+			if position[0]-i < 0 or position[1]-i < 0:
+				negative = False
+			elif getPos([position[0]-i,position[1]-i]) != None:
+				if getPos([position[0]-i,position[1]-i]).player != player and negative:
+					validPos.append([position[0]-i,position[1]-i])		
+				negative = False
+			elif negative:
+				validPos.append([position[0]-i,position[1]-i])
+			i += 1
+
+		i = 1
+		positive = True
+		negative = True
+
+		while (positive or negative) and i <= length:
+			if position[0]-i < 0 or position[1]+i > 7:
+				positive = False
+			elif getPos([position[0]-i,position[1]+i]) != None:
+				if getPos([position[0]-i,position[1]+i]).player != player and positive:
+					validPos.append([position[0]-i,position[1]+i])		
+				positive = False
+			elif positive:
+				validPos.append([position[0]-i,position[1]+i])
+			
+			if position[0]+i > 7 or position[1]-i < 0:
+				negative = False
+			elif getPos([position[0]+i,position[1]-i]) != None:
+				if getPos([position[0]+i,position[1]-i]).player != player and negative:
+					validPos.append([position[0]+i,position[1]-i])		
+				negative = False
+			elif negative:
+				validPos.append([position[0]+i,position[1]-i])
+			i += 1
+
+	if pType == "knight":
+		i = 0
+		validPos = [
+		[position[0]-2,position[1]-1],
+		[position[0]-2,position[1]+1],
+		[position[0]-1,position[1]-2],
+		[position[0]+1,position[1]-2],
+		[position[0]+2,position[1]-1],
+		[position[0]+2,position[1]+1],
+		[position[0]-1,position[1]+2],
+		[position[0]+1,position[1]+2]]
+		validPos = limitFilter(validPos)
+		while i < len(validPos):
+			if getPos(validPos[i]) != None:
+				if getPos(validPos[i]).player == player:
+					validPos.remove(validPos[i])
+				else:
+					i += 1
+			else:
+				i += 1
+
+	if pType == "pawn":
+		if player == "p1":
+			xInit = 1
+			i = 1
+		else:
+			xInit = 6
+			i = -1
+
+		validPos = [[position[0]+i, position[1]]]
+		if position[0] == xInit:
+			validPos.append([position[0]+(2*i), position[1]])
+		if getPos(validPos[0]) != None:
+			validPos = []
+		elif len(validPos) == 2:
+			if getPos(validPos[1]) != None:
+				validPos.remove(validPos[1])
+
+		if getPos([position[0]+i, position[1]-1]) != None:
+			validPos.append([position[0]+i, position[1]-1])
+
+		if getPos([position[0]+i, position[1]+1]) != None:
+			validPos.append([position[0]+i, position[1]+1])
+
+	return validPos
+	
 # initialisation of unicornhat
 for line in chessGrid:
 	for piece in line:
@@ -81,17 +225,35 @@ while True:
 	
 	# choose piece to play
 	while not valid: #loop until a valid choice
-		if getCase(select).player == "p1":
+		if not bool(caseToPosition(select)) or getCase(select) == None or getCase(select).player == "p2":
+			select = raw_input("Case invalide !\nSelectionner une case (A-H 1-8) :\n")
+			
+		else:
 			selectedPiece = getCase(select)
 			selectedPiece.invertIntensity()
 			invertIntensities(P1)
-			valid = not valid
-		else:
-			select = raw_input("Case invalide !\nSelectionner une case (A-H 1-8) :\n")
+			selectedPiece.possiblePositions = possibleCases(selectedPiece.position, selectedPiece.player, selectedPiece.type, selectedPiece.diagonal, selectedPiece.horizVert, selectedPiece.length)
+			if bool(selectedPiece.possiblePositions):
+				valid = not valid
+			else:
+				print("Aucun deplacement possible pour cette piece")
+				for i in range(3):
+					unicorn.set_pixel(selectedPiece.position[0], selectedPiece.position[1], selectedPiece.color[0], selectedPiece.color[1], selectedPiece.color[2])
+					unicorn.show()
+					sleep(0.2)
+					unicorn.set_pixel(selectedPiece.position[0], selectedPiece.position[1],0,0,0)
+					unicorn.show()
+					sleep(0.2)
+				selectedPiece.invertIntensity()
+				invertIntensities(P1)
+				select = raw_input("Selectionner une autre case:")
 	valid = not valid
 
-	selectedPiece.possiblePositions = freeCaseFilter(selectedPiece.possiblePositions)
+	
 	for possibility in selectedPiece.possiblePositions:
-		unicorn.set_pixel(possibility[0],possibility[1],255,255,255)
+		if getPos(possibility) != None:
+			unicorn.set_pixel(possibility[0],possibility[1],0,128,128)	
+		else:
+			unicorn.set_pixel(possibility[0],possibility[1],255,255,255)
 	unicorn.show()
 	sleep(4)
