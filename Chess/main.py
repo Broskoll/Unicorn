@@ -2,6 +2,8 @@ import unicornhat as unicorn
 from functions import *
 from classes import *
 
+unicorn.rotation(180)
+
 # pieces of player 1 (tab[Objects])
 P1 = [King(player = "p1", case = "A4"),
 Queen(player = "p1", case = "A5"),
