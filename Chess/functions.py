@@ -12,7 +12,7 @@ def setGrid(liste):
     sleep(0.1)
 
 """ Take a case (String) in argument like "A3"
- Return a tuple x/y like [3,4] """
+Return a tuple x/y like [3,4] """
 def caseToPosition(case):
         listComb = [["A","B","C","D","E","F","G","H"],["1","2","3","4","5","6","7","8"]]
         listXY = []
