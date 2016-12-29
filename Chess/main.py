@@ -2,7 +2,7 @@ import unicornhat as unicorn
 from functions import *
 from classes import *
 
-unicorn.rotation(180)
+#unicorn.rotation(180)
 
 # pieces of player 1 (tab[Objects])
 P1 = [King(player = "p1", case = "A4"),
@@ -35,7 +35,7 @@ chessGrid = [
 [P1[6],P1[4],P1[2],P1[0],P1[1],P1[3],P1[5],P1[7]],
 [P1[8],P1[9],P1[10],P1[11],P1[12],P1[13],P1[14],P1[15]],
 [None,None,None,None,None,None,None,None],
-[None,None,None,None,None,None,None,None],
+[None,None,None,Bishop(player = "p1", case = "D4"),None,None,None,None],
 [None,None,None,None,None,None,None,None],
 [None,None,None,None,None,None,None,None],
 [P2[8],P2[9],P2[10],P2[11],P2[12],P2[13],P2[14],P2[15]],
