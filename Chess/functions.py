@@ -20,7 +20,10 @@ def caseToPosition(case):
                 for j in i:
                         if case[listComb.index(i):listComb.index(i)+1] == j:
                                 listXY.append(i.index(j))
-        return listXY
+        if len(listXY) == 2: 
+        	return listXY
+        else:
+        	return False
 
 """ Take a tuple x/y like [3,4] in argument
 Return a case (String) like "A3" """
@@ -42,42 +45,3 @@ def limitFilter(posToFiltrate):
 		else:
 			i += 1
 	return posToFiltrate
-
-#def freeCaseFilter(posToFiltrate):
-
-
-""" Specific to Object pieces 
-arguments: 
-	-position : piece's position (tuple[])
- 	-diagonal : capacity to move diagonally (bool)
- 	-horizVert : capacity to move horizontally and vertically (bool)
- 	-length : hypotetic number of accessible cases each side (int)
-!!! other method call : limitFilter()
- 
-Return authorized positions"""
-def possiblePositions(position, diagonal, horizVert, length):
-	positions = []
-	if diagonal:	
-		for possibility in range(length):
-			around = possibility+1
-			positions.append([position[0]-around,position[1]-around])
-			positions.append([position[0]-around,position[1]+around])
-			positions.append([position[0]+around,position[1]-around])
-			positions.append([position[0]+around,position[1]+around])
-
-	if horizVert:
-		for possibility in range(length):
-			around = possibility+1
-			positions.append([position[0]-around,position[1]])
-			positions.append([position[0]+around,position[1]])
-			positions.append([position[0],position[1]-around])
-			positions.append([position[0],position[1]+around])
-	positions = limitFilter(positions)
-	return positions
-
-
-def scroll(liste,pas = 1):
-    LE = len(liste)-1
-    for i in range(pas):
-        liste = [liste[LE]]+liste[0:LE]
-    return liste
